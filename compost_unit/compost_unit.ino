@@ -2,17 +2,20 @@
 #include <EEPROM.h>
 
 int moisturePin = A0;
-int waterLevel = 0;
-int waterPump = D1;
+int waterLevel = 0; int orientation = 0;
+int waterPump = D3;
 int moisture;
-int floatSwitch = D0;
+int floatSwitch = D4;
+int tiltSwitch = D1;
+int servoPin = D5;
 Servo vent;
 
 
 void setup() {
-  vent.attach(D2);
+  vent.attach(servoPin);
   pinMode(moisturePin, INPUT);
   pinMode(floatSwitch, INPUT);
+  pinMode(tiltSwitch, INPUT);
   pinMode(waterPump, OUTPUT);
 
   Serial.begin(9600);
@@ -27,6 +30,11 @@ int getMoisture(int map_max, int map_min) {
 bool getWaterLevel () {
   waterLevel = digitalRead(floatSwitch);
   if (waterLevel == LOW) { return true; }
+  return false;
+}
+bool getOrientation () {
+  orientation = digitalRead(tiltSwitch);
+  if (orientation == LOW) { return true; }
   return false;
 }
 void togglePump(bool state) {
